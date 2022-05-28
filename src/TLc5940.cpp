@@ -36,6 +36,8 @@ void Tlc5940::init(uint16_t initialValue)
     ledcWrite(2, 2);
 }
 
+Tlc5940::Tlc5940() {}
+
 uint8_t Tlc5940::update(){
     ledcDetachPin(HSPI_CS);
 
@@ -51,7 +53,7 @@ uint8_t Tlc5940::update(){
 
     for (int tlc_index = 0; tlc_index < 24; tlc_index++) {
       // hspi->transfer(buff[tlc_num*24 + tlc_index]);
-      byte b = TLC5940::tlc_GSData[tlc_num*24 + tlc_index];
+      byte b = this->tlc_GSData[tlc_num*24 + tlc_index];
       for (int byte_index = 7; byte_index > -1; byte_index--) {
         digitalWrite(HSPI_SCLK, LOW);
         digitalWrite(HSPI_MISO, (b >> byte_index) & 1);
@@ -72,14 +74,15 @@ uint8_t Tlc5940::update(){
   // digitalWrite(HSPI_CS, LOW);
 
   ledcAttachPin(HSPI_CS, 1);
+  return 0;
 }
 
 void Tlc5940::setAll(uint16_t value) {
 {
     byte firstByte = value >> 4;
     byte secondByte = (value << 4) | (value >> 8);
-    byte *p = TLC5940::tlc_GSData;
-    while (p < TLC5940::tlc_GSData + NUM_TLCS * 24) {
+    byte *p = this->tlc_GSData;
+    while (p < this->tlc_GSData + NUM_TLCS * 24) {
         *p++ = firstByte;
         *p++ = secondByte;
         *p++ = (byte)value;
