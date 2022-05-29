@@ -89,6 +89,14 @@ void Tlc5940::setAll(uint16_t value) {
 }
 }
 
+void Tlc5940::disable(){
+    ledcWrite(2, 4095);
+}
+
+void Tlc5940::enable(){
+    ledcWrite(2, 2);
+}
+
 void Tlc5940::clear(void)
 {
     setAll(0);

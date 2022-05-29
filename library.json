@@ -1,6 +1,6 @@
 {
     "name": "ESP32 TLC5940",
-    "version": "1.0.1-alpha",
+    "version": "1.0.2-alpha",
     "description": "The TLC5940 is a 16 channel PWM unit with 12 bit duty cycle control (0 - 4095), 6 bit current limit control (0 - 63), and a daisy chainable serial interface. It is handy for expanding the number of PWM outputs available.",
     "keywords": "ESP32, Espressif, Arduino, Framework, TLC5940, Driver",
     "repository":
@@ -22,5 +22,5 @@
         "SPI": "1.0"
     },
     "frameworks": ["Arduino"],
-    "platforms": ["espressif32","ESP32"]
+    "platforms": ["espressif32","ESP32", "windows_amd64"]
   }

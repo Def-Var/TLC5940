@@ -26,8 +26,18 @@ Sometimes the bits are shifted by 1 or 2 digits
 - [ ] Use direct Hardware Timer instead of the ledc library
 - [ ] Implement Dot Correction (VPREG) Enabled 
 - [ ] Implement Error detection (XERR)
+- [x] Fast Output On / Off (BLANK HIGH) 
 - [X] Use SPI-Interface (Currently direct implementated) 
   - [ ] Support SPI3
   - [ ] Support Status Infromation Output
     - Note: Status Infromation Output is MISO (Master In Slave Out signal). The TLC Output is the Sout-Pin this pin has to be connected to the HSPI_
 
+## Features
+
+### Fast Output
+```
+// Starts Timer 
+tlc->enable() 
+// Sets Blank to High (Disables Output) LED Off 
+tlc->disable()
+```

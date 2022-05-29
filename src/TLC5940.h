@@ -18,6 +18,8 @@ class Tlc5940
     void set(uint8_t channel, uint16_t value);
     uint16_t get(uint8_t channel);
     void setAll(uint16_t value);
+    void disable();
+    void enable();
 #if VPRG_ENABLED
     void setAllDC(uint8_t value);
 #endif
