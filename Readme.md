@@ -1,6 +1,6 @@
 # TLC5940 Library for ESP32
 
-This Library is for the TLC5940 and the ESP32. Unfortunately the library from Paul Stoffregen claims to  support the ESP32 but the library is only for avr or teensy. This library can only handle the ESP32.
+This Library is for the TLC5940 and the ESP32. Unfortunately the library from Paul Stoffregen claims to  support the ESP32 but the library is only for avr or teensy. This library can only handle the ESP32. An in-deep description is on my blog: https://def-var.net/tutorial/tutorial-esp32-and-tlc5940/
 
 ## Pinout
 
