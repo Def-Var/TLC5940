@@ -1,5 +1,6 @@
 #include <Arduino.h>
 #include "tlc_config.h"
+#include <SPI.h>
 
 
 class Tlc5940
@@ -7,8 +8,10 @@ class Tlc5940
   private:
     uint8_t tlc_GSData[NUM_TLCS * 24];
     SPIClass *spi = NULL;
+    uint8_t amount_tlc = 1;
   public:
-    Tlc5940();
+    uint8_t * getGSData();
+    Tlc5940(uint8_t amount_tlc = 1);
     void init(uint16_t initialValue = 0);
     void clear(void);
     uint8_t update(void);

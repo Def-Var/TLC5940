@@ -9,9 +9,9 @@ void Tlc5940::init(uint16_t initialValue)
     pinMode(HSPI_SCLK, OUTPUT);  
 
     // SPI Setup
-    hspi = new SPIClass(HSPI);
-    hspi->begin();
-    hspi->beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE3));
+    this->spi = new SPIClass(HSPI);
+    this->spi->begin();
+    this->spi->beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE3));
 
     // Timer Stuf 
     pinMode(GSCLK_PIN, OUTPUT);  
@@ -40,7 +40,9 @@ void Tlc5940::init(uint16_t initialValue)
     update();
 }
 
-Tlc5940::Tlc5940() {}
+Tlc5940::Tlc5940(uint8_t amount_tlc) {
+    this->amount_tlc = amount_tlc;
+}
 
 uint8_t Tlc5940::update(){
   for (int tlc_num = 0; tlc_num < NUM_TLCS; tlc_num++) {
@@ -51,14 +53,14 @@ uint8_t Tlc5940::update(){
 
     for (int tlc_index = 0; tlc_index < 24; tlc_index++) {
       byte b = this->tlc_GSData[tlc_num*24 + tlc_index];
-      hspi->transfer(b);
+      this->spi->transfer(b);
     }
   }
 
   return 0;
 }
 
-void Tlc5940::set(int channel, int value) {
+void Tlc5940::set(uint8_t channel, uint16_t value) {
     byte index8 = (3 * 16 - 1) - channel;
     uint8_t *index12p = this->tlc_GSData + ((((uint16_t)index8) * 3) >> 1);
     if (index8 & 1) { // starts in the middle
@@ -85,4 +87,13 @@ void Tlc5940::setAll(uint16_t value) {
         *p++ = (byte)value;
     }
 }
+}
+
+void Tlc5940::clear(void)
+{
+    setAll(0);
+}
+
+uint8_t* Tlc5940::getGSData() {
+    return this->tlc_GSData;
 }
