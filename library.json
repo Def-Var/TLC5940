@@ -19,6 +19,7 @@
     "license": "MIT",
     "homepage": "https://def-var.net",
     "dependencies": {
+        "SPI": "1.0"
     },
     "frameworks": ["Arduino"],
     "platforms": ["espressif32","ESP32"]
