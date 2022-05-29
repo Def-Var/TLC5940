@@ -6,6 +6,7 @@ class Tlc5940
 {
   private:
     uint8_t tlc_GSData[NUM_TLCS * 24];
+    SPIClass *spi = NULL;
   public:
     Tlc5940();
     void init(uint16_t initialValue = 0);
