@@ -16,7 +16,7 @@
         "url": "https://def-var.net"
       }
     ],
-    "license": "MIT",
+    "license": "GNU Affero General Public License v3.0",
     "homepage": "https://def-var.net",
     "dependencies": {
         "SPI": "1.0"
