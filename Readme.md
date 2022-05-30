@@ -4,6 +4,8 @@ This Library is for the TLC5940 and the ESP32. Unfortunately the library from Pa
 
 ## Pinout
 
+WARNING: Pinout can change. Software is in alpha Version
+
 | ESP32 | TLC5940 |
 | --- | --- |
 | D14 / HSPI_SCLK | SCLK |
@@ -18,8 +20,7 @@ In future releases I want to use the Status Infromation Output from the TLC5940.
 
 ## Known issues
 
-### Issue 1
-Sometimes the bits are shifted by 1 or 2 digits
+- [ ] [Sometimes the bits are shifted by 1 or 2 digits (flickering)](https://github.com/Def-Var/TLC5940/issues/1)
 
 
 ## ToDo's 
@@ -35,6 +36,8 @@ Sometimes the bits are shifted by 1 or 2 digits
 ## Features
 
 ### Fast Output
+
+In `tlc->init()` is the timer default enabled.
 ```
 // Starts Timer 
 tlc->enable() 

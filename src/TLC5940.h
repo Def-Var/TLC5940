@@ -1,7 +1,12 @@
-#include <Arduino.h>
-#include "tlc_config.h"
-#include <SPI.h>
+#ifndef TLC_TLC5940_H
+#define TLC_TLC5940_H
 
+#include <SPI.h>
+#include <Arduino.h>
+
+#include "tlc_config.h"
+
+extern volatile int XLAT_FLAG;
 
 class Tlc5940
 {
@@ -28,3 +33,5 @@ class Tlc5940
 #endif
 
 };
+
+#endif

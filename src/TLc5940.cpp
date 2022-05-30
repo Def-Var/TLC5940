@@ -1,33 +1,55 @@
 #include"Tlc5940.h"
 
+volatile int XLAT_FLAG = 1;
+volatile int DEBUG = 0;
+hw_timer_t* blankTimer;
+
+
+
+static void IRAM_ATTR onBlank() {
+    DEBUG++;
+    digitalWrite(HSPI_MISO, HIGH);
+    if (XLAT_FLAG) {
+        XLAT_FLAG = 1;
+        digitalWrite(HSPI_CS, HIGH);
+        digitalWrite(HSPI_CS, LOW);
+    }
+    digitalWrite(HSPI_MISO, LOW);
+}
+
 void Tlc5940::init(uint16_t initialValue)
 {
     /* Pin Setup */
+    pinMode(26, OUTPUT);
     pinMode(HSPI_CS, OUTPUT);
-    pinMode(HSPI_MISO, OUTPUT);
+    
     pinMode(HSPI_MOSI, OUTPUT);
     pinMode(HSPI_SCLK, OUTPUT);  
 
     // SPI Setup
     this->spi = new SPIClass(HSPI);
     this->spi->begin();
-    this->spi->beginTransaction(SPISettings(4000000, MSBFIRST, SPI_MODE3));
-
+    this->spi->beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE3));
+    pinMode(HSPI_MISO, OUTPUT);
     // Timer Stuf 
     pinMode(GSCLK_PIN, OUTPUT);  
     ledcSetup(GSCLK_TIMER, GSCLK_FREQ, GSCLK_TIMER_RESULUTION);
     ledcAttachPin(GSCLK_PIN, GSCLK_TIMER);
     ledcWrite(GSCLK_TIMER, 1);
 
-    digitalWrite(HSPI_MOSI, LOW); // leave blank high (until the timers start)
     // double xlat = 976;
     // ledcSetup(1, xlat, 8);
     // ledcAttachPin(HSPI_CS, 1);
     // ledcWrite(1, 2);
 
-    ledcSetup(2, BLANK_FREQ, 12);
-    ledcAttachPin(HSPI_MISO, 2);
-    ledcWrite(2, 2);
+    // ledcSetup(2, BLANK_FREQ, 12);
+    // ledcAttachPin(HSPI_MISO, 2);
+    // ledcWrite(2, 2);
+
+    blankTimer = timerBegin(1 , 8, true);
+    timerAttachInterrupt(blankTimer, &onBlank, true);
+    timerAlarmWrite(blankTimer, 4096, true);
+    timerAlarmEnable(blankTimer);
     
 #if VPRG_ENABLED
     #error VPRG -> DOT correction not supported (yet)
@@ -45,17 +67,20 @@ Tlc5940::Tlc5940(uint8_t amount_tlc) {
 }
 
 uint8_t Tlc5940::update(){
+    Serial.print("TLC: ");
+    Serial.println(DEBUG);
+    if (XLAT_FLAG) {
+        return 1;
+    }
+
   for (int tlc_num = 0; tlc_num < NUM_TLCS; tlc_num++) {
-
-    digitalWrite(HSPI_CS, HIGH);
-    for (int i = 0; i < 2; i++);
-    digitalWrite(HSPI_CS, LOW);
-
     for (int tlc_index = 0; tlc_index < 24; tlc_index++) {
       byte b = this->tlc_GSData[tlc_num*24 + tlc_index];
       this->spi->transfer(b);
     }
   }
+
+    XLAT_FLAG = 1;
 
   return 0;
 }
@@ -90,11 +115,13 @@ void Tlc5940::setAll(uint16_t value) {
 }
 
 void Tlc5940::disable(){
-    ledcWrite(2, 4095);
+    timerAlarmDisable(blankTimer);
+    // ledcWrite(2, 4095);
 }
 
 void Tlc5940::enable(){
-    ledcWrite(2, 2);
+    // ledcWrite(2, 2);
+    timerAlarmEnable(blankTimer);
 }
 
 void Tlc5940::clear(void)
