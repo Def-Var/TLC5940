@@ -12,7 +12,8 @@ WARNING: Pinout can change. Software is in alpha Version
 | D15 / HSPI_CS | XLAT | 
 | D13 / HSPI_MOSI | SIN | 
 | D27 / PWM Pin | GSCLK | 
-| D12 / HSPI_MISO | BLANK | 
+| D12 / HSPI_MISO | - | 
+| D26 / PWM Pin | BLANK | 
 
 The pinout can be changed but bare in mind that the SCLK and SIN pins are connected to the right SPI port. The HSPI_MISO is connected to the BLANK pin but this is not relay nessasary, because this pin is not used for the data transfer. The BLANK pin and the GSCLK pin are used for the Operation for the IC. 
 

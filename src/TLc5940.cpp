@@ -1,6 +1,6 @@
 #include"Tlc5940.h"
 
-volatile int XLAT_FLAG = 1;
+volatile int XLAT_FLAG = 0;
 volatile int DEBUG = 0;
 hw_timer_t* blankTimer;
 
@@ -8,21 +8,21 @@ hw_timer_t* blankTimer;
 
 static void IRAM_ATTR onBlank() {
     DEBUG++;
-    digitalWrite(HSPI_MISO, HIGH);
+    digitalWrite(BLANK_PIN, HIGH);
     if (XLAT_FLAG) {
-        XLAT_FLAG = 1;
+        XLAT_FLAG = 0;
         digitalWrite(HSPI_CS, HIGH);
         digitalWrite(HSPI_CS, LOW);
     }
-    digitalWrite(HSPI_MISO, LOW);
+    digitalWrite(BLANK_PIN, LOW);
 }
 
 void Tlc5940::init(uint16_t initialValue)
 {
     /* Pin Setup */
-    pinMode(26, OUTPUT);
+    pinMode(BLANK_PIN, OUTPUT);
     pinMode(HSPI_CS, OUTPUT);
-    
+    pinMode(HSPI_MISO, OUTPUT);
     pinMode(HSPI_MOSI, OUTPUT);
     pinMode(HSPI_SCLK, OUTPUT);  
 
@@ -30,7 +30,7 @@ void Tlc5940::init(uint16_t initialValue)
     this->spi = new SPIClass(HSPI);
     this->spi->begin();
     this->spi->beginTransaction(SPISettings(8000000, MSBFIRST, SPI_MODE3));
-    pinMode(HSPI_MISO, OUTPUT);
+    
     // Timer Stuf 
     pinMode(GSCLK_PIN, OUTPUT);  
     ledcSetup(GSCLK_TIMER, GSCLK_FREQ, GSCLK_TIMER_RESULUTION);
