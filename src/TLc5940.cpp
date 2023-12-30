@@ -86,7 +86,7 @@ uint8_t Tlc5940::update(){
 }
 
 void Tlc5940::set(uint8_t channel, uint16_t value) {
-    byte index8 = (3 * 16 - 1) - channel;
+    byte index8 = (NUM_TLCS * 16 - 1) - channel;
     uint8_t *index12p = this->tlc_GSData + ((((uint16_t)index8) * 3) >> 1);
     if (index8 & 1) { // starts in the middle
                       // first 4 bits intact | 4 top bits of value
